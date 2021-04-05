@@ -11,7 +11,17 @@ class App extends Component {
     contacts: [],
     filter: "",
   };
-
+  componentDidMount() {
+    const contacts = JSON.parse(localStorage.getItem("contacts"));
+    console.log(" componentDidMount", contacts);
+    if (contacts) {
+      this.setState({ contacts: contacts });
+    }
+  }
+  componentDidUpdate(prevState) {
+    if (this.state.contacts !== prevState.contacts)
+      localStorage.setItem("contacts", JSON.stringify(this.state.contacts));
+  }
   addContact = ({ name, number }) => {
     // console.log("this.state.contacts",this.state.contacts)
     const sameName = this.state.contacts.some((item) => item.name === name);
@@ -43,17 +53,7 @@ class App extends Component {
       contacts: prevState.contacts.filter((contact) => contact.id !== id),
     }));
   };
-  componentDidMount() {
-    const contacts = JSON.parse(localStorage.getItem("contacts"));
-    console.log(" componentDidMount", contacts);
-    if (contacts) {
-      this.setState({ contacts: contacts });
-    }
-  }
-  componentDidUpdate(prevState) {
-    if (this.state.contacts !== prevState.contacts)
-      localStorage.setItem("contacts", JSON.stringify(this.state.contacts));
-  }
+
   render() {
     console.log("обновилось render");
     const { name, filter } = this.state;
